@@ -30,10 +30,18 @@ function star (req, res) {
       }
 
       req.couch.put(pm, data, function (er, cr, data) {
-        // console.error('er: ', er)
-        // console.error('cr: ', cr)
-        // console.error('data: ', data)
-        return res.send(200)
+        if (er || data.error) {
+          // this means the user's session has expired
+          er = er || new Error(data.error)
+          er.response = data
+          er.path = req.url
+          res.session.set('error', er)
+          res.session.set('done', req.url)
+          res.statusCode = 403
+          return res.send('User is not logged in', 403)
+        }
+
+        return res.send('OK', 200)
       })
 
     })
