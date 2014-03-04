@@ -7,6 +7,7 @@ module.exports = downloads
 var AC = require('async-cache')
 var hh = require('http-https')
 var parse = require('parse-json-response')
+var url = require('url')
 
 var cache = new AC({
   max: 1000,
@@ -33,11 +34,13 @@ function load (k, cb) {
   var pkg = k[1]
   var detail = k[2]
 
-  var url = config.downloads.url + detail + "/" + period
-  if (pkg) url += "/" + pkg
+  var endpoint = config.downloads.url + detail + "/" + period
+  if (pkg) endpoint += "/" + pkg
 
   // we want download stats!
-  var req = hh.request(url,parse(function(er, data, res) {
+  var r = url.parse(endpoint)
+  r.rejectUnauthorized = false;
+  var req = hh.request(r,parse(function(er, data, res) {
     if (er) {
       // request failed entirely
       console.warn('Fetching downloads failed', res.headers, er)
