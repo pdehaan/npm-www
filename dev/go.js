@@ -18,6 +18,7 @@ function queue () {
 
 var children = []
 function exec (cmd, args, wait, cb) {
+  console.log("Running %j %j",cmd,args)
   if (typeof wait === 'function') cb = wait, wait = 200
   cb = once(cb)
 
@@ -144,7 +145,7 @@ function launchWww (er) {
   }
 
   config.port = 15443
-  config.host = 'localhost'
+  config.host = '192.168.33.10'
   config.httpPort = 15080
 
   config.npm = config.npm || {
@@ -163,7 +164,7 @@ function launchWww (er) {
   }
 
   config.downloads = {
-    url: "http://localhost:8000/downloads/"
+    url: "https://api.npmjs.org/downloads/"
   }
 
   config.debug = true
