@@ -1,5 +1,6 @@
 $(window).on('load',function(e) {
   if($('.downloads-chart').length > 0 ) {
+    var monthData = JSON.parse($('#download-chart').attr('data-graph-points'))
     downloadChart({
       data: monthData.map(function(dayPair,index,monthData) {
         dayPair.date = Date.parse(dayPair.day)
