@@ -157,8 +157,23 @@ function decorate (req, res, config) {
     , req_id: crypto.randomBytes(4).toString('hex')
     , session: req.sessionToken })
 
+  // allow stuff like "req.pathname", etc.
+  var u = url.parse(req.url, true)
+  delete u.auth
+  Object.keys(u).forEach(function (k) {
+    req[k] = u[k]
+  })
+
+  req.metrics = res.metrics = config.metricsAgent
+  req.timing = {}
+  req.timing.start = Date.now()
+
   res.on('finish', function () {
+    req.timing.end = Date.now()
     req.log.info({ res: res })
+    if (!req.pathname.match(/^\/static/)) {
+      req.metrics.histogram('latency|' + req.pathname, req.timing.end - req.timing.start)
+    }
   })
 
   // more debugging info.
@@ -168,13 +183,6 @@ function decorate (req, res, config) {
   address = address.address + ':' + address.port
 
   req.log.info({req: req, remote: remoteAddr, address: address})
-
-  // allow stuff like "req.pathname", etc.
-  var u = url.parse(req.url, true)
-  delete u.auth
-  Object.keys(u).forEach(function (k) {
-    req[k] = u[k]
-  })
 
   res.error = ErrorPage(req, res, errorPageConf)
 

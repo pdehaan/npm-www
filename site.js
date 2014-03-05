@@ -13,7 +13,14 @@ var router = require("./router.js")
 
 , StringDecoder = require('string_decoder').StringDecoder
 , qs = require("querystring")
+, ZagAgent = require('zag-agent')
 
+
+if (config.metrics) {
+  config.metricsAgent = ZagAgent(config.metrics.collectors).scope(config.metrics.prefix)
+} else {
+  config.metricsAgent = { histogram: function() {}, counter: function() {}, close: function() {} }
+}
 
 config.keys = new Keygrip(config.keys)
 

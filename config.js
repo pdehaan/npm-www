@@ -102,6 +102,11 @@ Object.keys(admin).forEach(function (k) {
   exports[k] = admin[k]
 })
 
+exports.metrics = {
+    collectors: [ '54.186.0.239:8876' ],
+    prefix:     'npm-www'
+}
+
 if (module === require.main) {
   // just show the configs
   if (process.argv[2])
