@@ -18,6 +18,7 @@ Buffer.prototype.toJSON = Buffer.prototype.inspect
 var config = require("./config.js")
 , http = require("http")
 , https = require("hardhttps")
+, domain = require('domain')
 , site = require("./site.js")
 , server
 , loneServer
@@ -61,6 +62,14 @@ var logger = bunyan.createLogger(config.log)
 console.error = logger.warn.bind(logger)
 console.log = logger.info.bind(logger)
 
+// raygun error reporting
+var raygun
+if (config.raygunKey) {
+  var Raygun = require('raygun')
+  raygun = new Raygun.Client().init({ apiKey: config.raygunKey })
+  config.raygun = raygun
+}
+
 // if there's an admin couchdb user, then set that up now.
 var CouchLogin = require('couch-login')
 if (config.couchAuth) {
@@ -87,14 +96,30 @@ var r = config.redis
 config.redis.client = redis.createClient(r.port, r.host, r)
 if (r.auth) config.redis.client.auth(r.auth)
 
-if (config.https) {
-  server = https.createServer(config.https, site)
-  loneServer = https.createServer(config.https, site)
-} else {
-  server = http.createServer(site)
-  loneServer = http.createServer(site)
+
+function wrappedSite(req, res) {
+  if (!raygun) {
+    return site(req, res)
+  }
+
+  var d = domain.create()
+  d.on('error', function(e) {
+    raygun.send(e)
+    throw(e)
+  })
+  d.run(function() {
+    req.raygun = raygun
+    site(req, res)
+  })
 }
 
+if (config.https) {
+  server = https.createServer(config.https, wrappedSite)
+  loneServer = https.createServer(config.https, wrappedSite)
+} else {
+  server = http.createServer(wrappedSite)
+  loneServer = http.createServer(wrappedSite)
+}
 
 var npmconf = config.npm || {}
 npmconf["node-version"] = null

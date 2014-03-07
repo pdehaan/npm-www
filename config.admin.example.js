@@ -35,6 +35,8 @@ exports.mailTransportSettings = null
 //   }
 // }
 
+exports.raygunkey = null
+
 // HTTP keys
 // Should be PEM strings.  Feel free to read from files.
 exports.https = null

@@ -93,6 +93,10 @@ function decorate (req, res, config) {
   d.add(req)
   d.add(res)
   d.on("error", function (er) {
+    if (req.raygun) {
+      req.raygun.send(er)
+    }
+
     if (er.domainEmitter) {
       var c = er.domainEmitter.constructor
       if (c)
