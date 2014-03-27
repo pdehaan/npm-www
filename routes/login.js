@@ -62,6 +62,8 @@ function handleForm (req, res) {
         }
 
         res.session.get('done', function (er, done) {
+          req.metrics.counter('users>logins')
+
           var donePath = '/profile'
           if (done) {
             // Make sure that we don't ever leave this domain after login

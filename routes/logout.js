@@ -8,6 +8,7 @@ module.exports = function (req, res) {
   function next () {
     // delete the whole session
     req.session.get('done', function (er, done) {
+      req.metrics.counter('users>logouts')
       var donePath = '/profile'
       if (done) {
         // Make sure that we don't ever leave this domain after login
