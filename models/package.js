@@ -12,6 +12,7 @@ var LRU = require("lru-cache")
 , moment = require('moment')
 , url = require('url')
 , ghurl = require('github-url-from-git')
+, metrics = require('../metrics-client.js')()
 
 function urlPolicy (pkgData) {
   var gh = pkgData && pkgData.repository ? ghurl(pkgData.repository.url) : null
@@ -72,7 +73,15 @@ function package (params, cb) {
 
   var uri = name
   if (version) uri += '/' + version
+
+  var timing = {}
+  timing.start = Date.now()
+
   npm.registry.get(uri, 1, false, true, function (er, data) {
+
+    timing.end = Date.now()
+    metrics.histogram('registry-latency>package|' + name + '|' + version, timing.end - timing.start)
+
     if (er) return cb(er)
     data.starredBy = Object.keys(data.users || {}).sort()
     var len = data.starredBy.length

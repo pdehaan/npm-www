@@ -1,5 +1,6 @@
 module.exports = browse
 var qs = require('querystring')
+var metrics = require('../metrics-client.js')()
 
 var LRU = require('lru-cache')
 var cache = new LRU({
@@ -140,7 +141,14 @@ function browse (type, arg, skip, limit, cb) {
 
   u += '?' + qs.stringify(query)
 
+  var timing = {}
+  timing.start = Date.now()
+
   npm.registry.get(u, function (er, data, res) {
+
+    timing.end = Date.now()
+    metrics.histogram('registry-latency>browse|' + type + '|' + arg, timing.end - timing.start)
+
     if (data) {
       data = transform(type, arg, data, skip, limit)
       cache.set(key, data)
