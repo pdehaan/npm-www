@@ -34,13 +34,13 @@ function filterUser (id, rev) {
 // thing for the dev server starting up properly.
 function replicateDdocs () {
   request({
-    url: 'http://admin:admin@localhost:15984/_users/_design/_auth'    
+    url: 'http://admin:admin@localhost:15984/_users/_design/_auth'
   , json: true
   }, function (err, res, bod) {
     _auth._rev = bod._rev
-  
+
     request.put({
-      url: 'http://admin:admin@localhost:15984/_users/_design/_auth' 
+      url: 'http://admin:admin@localhost:15984/_users/_design/_auth'
     , body: _auth
     , json: true
     }, function (e, resp, b) {
@@ -51,7 +51,7 @@ function replicateDdocs () {
         // console.log({success:true, resp:resp, body:b})
       } else {
         console.log({error:"status code is not 201.", body:b})
-      }          
+      }
 
       initCouchDocs.replicateDdocs(replicatePackages);
     })
@@ -69,7 +69,7 @@ var userTimer
 function replicatePackages () {
   console.error('replicate packages (around 1/256th of the registry)')
   new Replicator({
-    from: 'https://skimdb.npmjs.com/registry',
+    from: 'https://aws-west-6.skimdb.internal.npmjs.com/registry',
     to: 'http://admin:admin@localhost:15984/registry',
     filter: filterPackage
   }).push(function () {
@@ -80,7 +80,7 @@ function replicatePackages () {
 
 var morePackagesTimer
 function replicateUsers () {
-  
+
   var cb = function () {
     if (didMorePackages) return
     clearTimeout(morePackagesTimer)
@@ -103,11 +103,11 @@ function replicateUsers () {
         fs.writeFileSync(__dirname + '/user_upload_complete.dat', '');
       } else {
         console.log({error:"status code is not 201.", body:b})
-      }          
+      }
 
       return cb()
   })
-  
+
 }
 
 // now replicate more packages.  by this time, the site has

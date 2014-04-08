@@ -6,10 +6,11 @@ function csplog (req, res) {
 
   req.on('body', function (data) {
     try {
-      data = JSON.parse(data)      
+      data = JSON.parse(data)
     } catch (ex) {
       data = {msg: data}
     }
     req.log.warn(data, 'content-security-policy validation')
+    return res.send('OK', 200)
   })
 }

@@ -26,8 +26,8 @@ var config = require("./config.js")
 , bunyan = require('bunyan')
 , npm = require('npm')
 , fs = require('fs')
-, ZagAgent = require('zag-agent')
-, metrics
+, os = require('os')
+, metrics = require('./metrics-client.js')()
 , gitHead
 
 try {
@@ -55,7 +55,7 @@ var canon = config.canon = require('canonical-host')(h, lh, 301)
 
 config.stamp = 'pid=' + process.pid + ' ' +
                'worker=' + cluster.worker.id + ' ' + gitHead + ' ' + h +
-               ' ' + process.env.SMF_ZONENAME
+               ' ' + os.hostname() + ' ' + process.env.SMF_ZONENAME
 
 config.log.worker = cluster.worker.id
 config.log.pid = process.pid
@@ -70,13 +70,6 @@ if (config.raygunKey) {
   var Raygun = require('raygun')
   raygun = new Raygun.Client().init({ apiKey: config.raygunKey })
   config.raygun = raygun
-}
-
-// metrics agent
-if (config.metrics) {
-  metrics = ZagAgent(config.metrics.collectors).scope(config.metrics.prefix)
-} else {
-  metrics = { histogram: function() {}, counter: function() {}, close: function() {} }
 }
 
 // if there's an admin couchdb user, then set that up now.

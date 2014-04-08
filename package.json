@@ -3,7 +3,7 @@
   "name": "npm-www",
   "homepage": "http://npmjs.org/",
   "description": "website for npm",
-  "version": "0.5.2",
+  "version": "0.5.4",
   "dependencies": {
     "async-cache": "~0.1.2",
     "bunyan": "~0.14.0",
@@ -31,6 +31,7 @@
     "npm": "^1.4.4",
     "npm-registry-client": "~0.2.24",
     "npm-user-validate": "0",
+    "npm2es": "git://github.com/npm/npm2es.git",
     "npmconf": "0.0",
     "redis": "~0.8.1",
     "redsess": "~0.3.2",
@@ -89,20 +90,19 @@
     "start": "node server.js",
     "show-conf": "node config.js",
     "dev": "node dev/go.js | bunyan -l warn",
-    "dev-www": "node dev/go.js www-only",
-    "dev-db": "node dev/go.js db-only",
+    "dev-www": "node dev/go.js www-only | bunyan -l warn",
+    "dev-db": "node dev/go.js db-only | bunyan -l warn",
     "repl": "node repl.js",
     "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js"
   },
   "devDependencies": {
     "replicate": "git://github.com/isaacs/replicate",
     "touch": "0",
-    "npm2es": "~0.4.0",
     "once": "~1.1.1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/isaacs/npm-www.git"
+    "url": "git://github.com/npm/npm-www.git"
   },
   "keywords": [
     "npm",

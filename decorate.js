@@ -185,7 +185,8 @@ function decorate (req, res, config) {
     req.timing.end = Date.now()
     req.log.info({ res: res })
     if (!req.pathname.match(/^\/static/)) {
-      req.metrics.histogram('latency|' + req.pathname, req.timing.end - req.timing.start)
+      var pathbits = req.pathname.split('/').join('|')
+      req.metrics.histogram('latency' + pathbits, req.timing.end - req.timing.start)
     }
   })
 

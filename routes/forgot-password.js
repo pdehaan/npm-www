@@ -1,6 +1,7 @@
 var config = require('../config.js')
-var userValidate = require('npm-user-validate')
-var npm = require('npm')
+  , userValidate = require('npm-user-validate')
+  , npm = require('npm')
+  , qs = require('querystring')
 
 // if there's no email configuration set up, then we can't do this.
 // however, in dev mode, just show the would-be email right on the screen
@@ -167,20 +168,24 @@ function handle (req, res) {
 
 function lookupUserByEmail (em, req, res) {
   var couch = config.adminCouch
-  , pe = '/_users/_design/_auth/_list/email/listAll?email=' + encodeURIComponent(em)
+  , query = { startkey: JSON.stringify([em]), endkey: JSON.stringify([em, {}]), group: 'true' }
+  , pe = '/_users/_design/_auth/_view/userByEmail?' + qs.encode(query)
 
   req.metrics.counter('couch>view|users|auth|list|email')
 
   couch.get(pe, function PE (er, resp, data) {
+    // turn view data into array of usernames
+    var usernames = data.rows.map(function (obj) { return obj.key[1] })
+
     // got multiple usernames with that email address
     // show a view where we can choose the right user
     // after chosing we get data.selectName
-    if (data.length > 1) {
-      return res.template('password-recovery-choose-user.ejs', {users: data})
+    if (usernames.length > 1) {
+      return res.template('password-recovery-choose-user.ejs', {users: usernames})
     }
     // just one user with that email address
-    if (data.length === 1) {
-      name = data[0]
+    if (usernames.length === 1) {
+      name = usernames[0]
       return lookupUserByUsername(name, req, res)
     }
 

@@ -2,9 +2,10 @@
 
 <div class="downloads-chart">
   <div class="graph">
-    <div id="download-chart" data-graph-points="<%= JSON.stringify(month) %>"></canvas>
+    <div id="download-chart" data-graph-points="<%= JSON.stringify(month) %>"></div>
   </div>
-  <div class="day"><%- month[month.length-1].downloads %> downloads yesterday</div>
+  <% var dlcount = +month[month.length-1].downloads %>
+  <div class="day"><%- dlcount %> download<% if(dlcount!=1){ %>s<% } %> yesterday</div>
 </div>
 
 <% } %>

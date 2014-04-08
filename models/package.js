@@ -1,10 +1,6 @@
 module.exports = package
 
-var LRU = require("lru-cache")
-, regData = new LRU({
-    max: 1000,
-    maxAge: 100
-  })
+var config = require('../config.js')
 , marked = require("marked")
 , sanitizer = require('sanitizer')
 , gravatar = require('gravatar').url
@@ -12,6 +8,7 @@ var LRU = require("lru-cache")
 , moment = require('moment')
 , url = require('url')
 , ghurl = require('github-url-from-git')
+, metrics = require('../metrics-client.js')()
 
 function urlPolicy (pkgData) {
   var gh = pkgData && pkgData.repository ? ghurl(pkgData.repository.url) : null
@@ -20,7 +17,7 @@ function urlPolicy (pkgData) {
       if (!gh) return null
       // temporary fix for relative links in github readmes, until a more general fix is needed
       var v = url.parse(gh)
-      if (u.path_) { v.pathname = v.pathname + '/blob/master/' + u.path_} 
+      if (u.path_) { v.pathname = v.pathname + '/blob/master/' + u.path_}
       u = {
         protocol: v.protocol,
         host: v.host,
@@ -66,48 +63,76 @@ function package (params, cb) {
     return cb(new Error('invalid package name'))
 
   var k = name + '/' + version
-  //, data = regData.get(k)
-
-  //if (data) return cb(null, data)
-
-  var uri = name
-  if (version) uri += '/' + version
-  npm.registry.get(uri, 1, false, true, function (er, data) {
+  config.redis.client.get(k, function (er, data) {
+    // if error, let us know
     if (er) return cb(er)
-    data.starredBy = Object.keys(data.users || {}).sort()
-    var len = data.starredBy.length
 
-    if (data.time && data['dist-tags']) {
-      var v = data['dist-tags'].latest
-      var t = data.time[v]
-      if (!data.versions[v]) {
-        console.error('invalid package data: %s', data._id)
-        return cb(new Error('invalid package: '+ data._id))
+    config.redis.client.ttl('package:' + k, function (er, ttl) {
+      if (data && ttl > -1) {
+        metrics.counter('registry-cache>package|' + name + '|' + version)
+        return cb(null, JSON.parse(data))
       }
-      data.version = v
-      if (data.versions[v].readme) {
-        data.readme = data.versions[v].readme
-        data.readmeSrc = null
-      }
-      data.fromNow = moment(t).fromNow()
 
-      setLicense(data, v)
-    }
+      var uri = name
+      if (version) uri += '/' + version
 
-    if (data.homepage && typeof data.homepage !== 'string') {
-      if (Array.isArray(data.homepage))
-        data.homepage = data.homepage[0]
-      if (typeof data.homepage !== 'string')
-        delete data.homepage
-    }
+      var timing = {}
+      timing.start = Date.now()
 
-    if (data.readme && !data.readmeSrc) {
-      data.readmeSrc = data.readme
-      data.readme = parseReadme(data)
-    }
-    gravatarPeople(data)
-    regData.set(k, data)
-    return cb(null, data)
+      npm.registry.get(uri, 1, false, true, function (er, data) {
+
+        timing.end = Date.now()
+        metrics.histogram('registry-latency>package|' + name + '|' + version, timing.end - timing.start)
+
+        if (er) return cb(er)
+        data.starredBy = Object.keys(data.users || {}).sort()
+        var len = data.starredBy.length
+
+        if (data.time && data['dist-tags']) {
+          var v = data['dist-tags'].latest
+          var t = data.time[v]
+          if (!data.versions[v]) {
+            console.error('invalid package data: %s', data._id)
+            return cb(new Error('invalid package: '+ data._id))
+          }
+          data.version = v
+          if (data.versions[v].readme) {
+            data.readme = data.versions[v].readme
+            data.readmeSrc = null
+          }
+          data.fromNow = moment(t).fromNow()
+          data._npmUser = data.versions[v]._npmUser || null
+
+          // check if publisher is in maintainers list
+          data.publisherIsInMaintainersList = isPubInMaint(data)
+
+          setLicense(data, v)
+        }
+
+        if (data.time && data.time.unpublished) {
+          var t = data.time.unpublished.time
+          data.unpubFromNow = moment(t)
+        }
+
+        if (data.homepage && typeof data.homepage !== 'string') {
+          if (Array.isArray(data.homepage))
+            data.homepage = data.homepage[0]
+          if (typeof data.homepage !== 'string')
+            delete data.homepage
+        }
+
+        if (data.readme && !data.readmeSrc) {
+          data.readmeSrc = data.readme
+          data.readme = parseReadme(data)
+        }
+        gravatarPeople(data)
+
+        var cacheExpiration = 60 //seconds
+        config.redis.client.set('package:' + k, JSON.stringify(data), 'EX', cacheExpiration, function (er, resp) {
+          return cb(er, data)
+        })
+      })
+    })
   })
 }
 
@@ -132,8 +157,23 @@ function parseReadme (data) {
   return sanitizer.sanitize(p, urlPolicy(data))
 }
 
+function isPubInMaint (data) {
+  if (data.maintainers && data._npmUser) {
+    for (var i = 0; i < data.maintainers.length; i++) {
+      if (data.maintainers[i].name === data._npmUser.name) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
 function gravatarPeople (data) {
   gravatarPerson(data.author)
+
+  if (data._npmUser) gravatarPerson(data._npmUser)
+
   if (data.maintainers) data.maintainers.forEach(function (m) {
     gravatarPerson(m)
   })

@@ -167,6 +167,11 @@ function launchWww (er) {
     url: "https://api.npmjs.org/downloads/"
   }
 
+  config.metrics = {
+      collectors: [ 'metrics.internal.npmjs.com:8877' ],
+      prefix:     'npm-www-dev'
+  }
+
   config.debug = true
 
   // write to the dev admin config.

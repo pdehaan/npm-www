@@ -12,7 +12,7 @@ exports.cluster = { size : require("os").cpus().length }
 // redis auth
 exports.redis = { host: '127.0.0.1', port: 6379 }
 
-exports.registryCouch = "https://skimdb.npmjs.com/"
+exports.registryCouch = "https://aws-west-6.skimdb.internal.npmjs.com/"
 
 // npm config settings
 exports.npm =
@@ -92,6 +92,11 @@ if (env === 'production') {
   admin = {}
 }
 
+exports.metrics = {
+    collectors: [ 'metrics.internal.npmjs.com:8876' ],
+    prefix:     'npm-www'
+}
+
 Object.keys(admin).forEach(function (k) {
   if (k === 'redisAuth') {
     exports.redis.auth = admin[k]
@@ -101,11 +106,6 @@ Object.keys(admin).forEach(function (k) {
   }
   exports[k] = admin[k]
 })
-
-exports.metrics = {
-    collectors: [ '54.186.0.239:8876' ],
-    prefix:     'npm-www'
-}
 
 if (module === require.main) {
   // just show the configs

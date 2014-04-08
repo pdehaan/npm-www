@@ -44,6 +44,14 @@ function transform (data) {
     d.twitter = d.twitter.replace(/^@*(.*)/, '$1').replace(/^https?:\/\/twitter.com\//, '')
 
   d.fields = loadFields(d)
+
+  // iterations must always be a number!
+  if (d.iterations)
+    d.iterations = +d.iterations
+
+  // if mustChangePass exists, make sure it's not a string and thus always true!
+  if (d.mustChangePass) d.mustChangePass = JSON.parse(d.mustChangePass)
+
   return d
 }
 

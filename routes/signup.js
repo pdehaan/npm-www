@@ -63,6 +63,9 @@ function handle (req, res) {
 
         req.session.set('profile', data, function (er) {
           if (er) return res.error(er, 500)
+
+          req.metrics.counter('users>signups')
+
           // it worked!  now let them add some details
           return res.redirect('/profile-edit')
         })

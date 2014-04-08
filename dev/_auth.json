@@ -10,6 +10,10 @@
     "listAll": {
       "map": "function (doc) { return emit(doc._id, doc) }"
     },
+    "userByEmail": {
+      "map": "function (doc) {\n      if (doc.email || doc.name) {\n        emit([ doc.email, doc.name ], 1)\n      }\n    }",
+      "reduce": "_sum"
+    },
     "invalidUser": {
       "map": "function (doc) {\n    var errors = []\n    if (doc.type !== 'user') {\n      errors.push('doc.type must be user')\n    }\n\n    if (!doc.name) {\n      errors.push('doc.name is required')\n    }\n\n    if (doc.roles && !isArray(doc.roles)) {\n      errors.push('doc.roles must be an array')\n    }\n\n    if (doc._id !== ('org.couchdb.user:' + doc.name)) {\n      errors.push('Doc ID must be of the form org.couchdb.user:name')\n    }\n\n    if (doc.name !== doc.name.toLowerCase()) {\n      errors.push('Name must be lower-case')\n    }\n\n    if (doc.name !== encodeURIComponent(doc.name)) {\n      errors.push('Name cannot contain non-url-safe characters')\n    }\n\n    if (doc.name.charAt(0) === '.') {\n      errors.push('Name cannot start with .')\n    }\n\n    if (!(doc.email && doc.email.match(/^.+@.+\\..+$/))) {\n      errors.push('Email must be an email address')\n    }\n\n    if (doc.password_sha && !doc.salt) {\n      errors.push('Users with password_sha must have a salt.')\n    }\n    if (!errors.length) return\n    emit([doc.name, doc.email], errors)\n  }"
     },

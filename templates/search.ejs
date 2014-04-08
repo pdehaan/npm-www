@@ -5,21 +5,36 @@
 <ul class="search-results">
   <% search.hits.hits.forEach(function(hit) { %>
   <li class="search-result package">
-    <h2><a href="/package/<%= encodeURI(hit.fields.name) %>"><%= sanitize(hit.fields.name) %></a></h2>
-    <p class="details">
-      <%= hit.fields.version %> by
-      <a href="/~<%= hit.fields.author %>"><%= hit.fields.author %></a>
-    </p>
-    <p><%= sanitize(hit.fields.description) %></p>
-    <% if (hit.fields && hit.fields.keywords && hit.fields.keywords.length) { %>
-    <ul class="keywords">
-      <% hit.fields.keywords.forEach(function(keyword, idx) { %>
-        <li>
-          <a href="/browse/keyword/<%= encodeURI(keyword) %>"><%= sanitize(keyword) %></a><% if(idx<hit.fields.keywords.length-1) { %>, <% } %>
-        </li>
-      <% }) %>
+    <h2><a href="/package/<%= encodeURI(hit.fields.name) %>" title="<%= hit.fields.name %>"><%= sanitize(hit.fields.name) %></a></h2>
+    <ul class="hud">
+      <li class="dlScore" title="average downloads"><span
+      <% if (parseFloat(hit.fields.dlScore) > 1.1 && parseFloat(hit.fields.dlWeek) >= 50) { %>
+        class="dlScore dlScore-increasing" title="trending upward">
+      <% } else if (parseFloat(hit.fields.dlScore) < 0.9 && parseFloat(hit.fields.dlWeek) >= 50) { %>
+        class="dlScore dlScore-decreasing" title="trending downward">
+      <% } else { %>
+        >
+      <% } %>
+        <%= hit.fields.dlDay || 0 %>
+      </span></li>
+      <li class="stars" title="number of stars by users"><%= hit.fields.stars || 0 %></li>
     </ul>
-    <% } %>
+    <p class="description"><%= sanitize(hit.fields.description) %></p>
+    <div class="details">
+      <span class="version">
+        <%= hit.fields.version %> by
+        <a href="/~<%= hit.fields.author %>"><%= hit.fields.author %></a>
+      </span>
+      <% if (hit.fields && hit.fields.keywords && hit.fields.keywords.length) { %>
+      <ul class="keywords">
+        <% hit.fields.keywords.forEach(function(keyword, idx) { %>
+          <li>
+            <a href="/browse/keyword/<%= encodeURI(keyword) %>"><%= sanitize(keyword) %></a><% if(idx<hit.fields.keywords.length-1) { %>, <% } %>
+          </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
   </li>
   <% }); %>
 </ul>
