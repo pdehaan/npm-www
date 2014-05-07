@@ -82,11 +82,17 @@ var admin
 if (env === 'production') {
   admin = require('./config.admin.js')
 } else try {
-  if (env !== 'dev') {
-    admin = require('./config.admin.js')
-  } else {
-    admin = require('./config.dev.js')
+  switch (env) {
+    case 'dev':
+      admin = require('./config.dev.js')
+      break
+    case 'test':
+      admin = require('./config.test.js')
+      break
+    default:
+      admin = require('./config.admin.js')
   }
+
 } catch (er) {
   console.error('Warning: No admin configurations.  Not suitable for production use.')
   admin = {}

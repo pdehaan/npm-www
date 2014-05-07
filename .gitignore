@@ -3,6 +3,7 @@
 !/node_modules/.bin/bunyan*
 node_modules/replicate
 node_modules/touch
+node_modules/lab
 config.admin.js
 config.dev.js
 ssl

@@ -94,12 +94,14 @@
     "dev-www": "node dev/go.js www-only | bunyan -l warn",
     "dev-db": "node dev/go.js db-only | bunyan -l warn",
     "repl": "node repl.js",
-    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js"
+    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js",
+    "test": "lab -v"
   },
   "devDependencies": {
+    "lab": "^3.1.1",
+    "once": "~1.1.1",
     "replicate": "git://github.com/isaacs/replicate",
-    "touch": "0",
-    "once": "~1.1.1"
+    "touch": "0"
   },
   "repository": {
     "type": "git",
