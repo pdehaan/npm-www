@@ -32,7 +32,7 @@
     "nodemailer": "~0.3.19",
     "npm": "^1.4.4",
     "npm-registry-client": "~0.2.24",
-    "npm-user-validate": "0",
+    "npm-user-validate": "^0.1.0",
     "npm2es": "git://github.com/npm/npm2es.git",
     "npmconf": "0.0",
     "raygun": "^0.4.1",
@@ -58,6 +58,7 @@
     "ejs",
     "emcee",
     "error-page",
+    "github-url-from-git",
     "glob",
     "graceful-fs",
     "gravatar",
@@ -73,6 +74,7 @@
     "npm-registry-client",
     "npm-user-validate",
     "npmconf",
+    "raygun",
     "redis",
     "redsess",
     "request",
@@ -80,9 +82,7 @@
     "sanitizer",
     "st",
     "stylus",
-    "templar",
-    "github-url-from-git",
-    "raygun"
+    "templar"
   ],
   "engines": {
     "node": ">=0.7.7"
