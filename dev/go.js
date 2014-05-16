@@ -131,6 +131,10 @@ function launchWww (er) {
   config.redis = { host: '127.0.0.1', port: 16379 }
   config.redisAuth = 'i-am-using-redis-in-development-mode-for-npm-www'
   config.keys = ['these keys are for dev mode only']
+  config.stripe = {
+    "secretkey": "sk_test_bxAixWI4b6LJJZlPSmX8z6hu",
+    "publickey": "pk_test_dxl0gkFmBMdyGvhgt7Q86KwH"
+  }
 
   // TODO:
   // set expots.mailTransPortType and exports.mailTransportSettings

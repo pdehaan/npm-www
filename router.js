@@ -71,7 +71,9 @@ router.addRoute('/forgot', forgot)
 router.addRoute('/forgot/:token', forgot)
 
 router.addRoute('/about', require('./routes/about.js'))
+
 router.addRoute('/whoshiring', require('./routes/whoshiring.js'))
+router.addRoute('/joinwhoshiring', require('./routes/payments.js'))
 
 router.addRoute('/', function (req, res) {
   var search = req.url && req.url.split('?')[1]

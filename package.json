@@ -42,6 +42,7 @@
     "routes": "~0.1.1",
     "sanitizer": "^0.1.1",
     "st": "^0.3.0",
+    "stripe": "^2.5.2",
     "stylus": "git://github.com/LearnBoost/stylus.git",
     "templar": "~0.2",
     "zag-agent": "0.0.1"
