@@ -23,7 +23,10 @@ function payments (req, res) {
       card: token.id, // obtained with Stripe.js
       description: "Charge for " + token.email
     }, function(err, charge) {
-      if (err) res.send(err, 500)
+      if (err) {
+        console.error(err)
+        return res.send(err, 500)
+      }
 
       return res.send('OK', 200)
     });
