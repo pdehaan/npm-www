@@ -21,6 +21,6 @@ dev/elasticsearch/logs
 dev/user_upload_complete.dat
 .idea
 .vagrant
-node_modules/uglifyjs/
+node_modules/uglify-js/
 node_modules/npm-typeahead/
 node_modules/browserify/
