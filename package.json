@@ -46,8 +46,7 @@
     "stylus": "git://github.com/LearnBoost/stylus.git",
     "templar": "~0.2",
     "zag-agent": "0.0.1",
-    "bluebird": "~1.2.4",
-    "npm-typeahead": "0.0.0"
+    "bluebird": "~1.2.4"
   },
   "bundleDependencies": [
     "async-cache",
@@ -105,7 +104,8 @@
     "touch": "0",
     "once": "~1.1.1",
     "browserify": "~4.1.6",
-    "uglifyjs": "~2.3.6"
+    "uglifyjs": "~2.3.6",
+    "npm-typeahead": "0.0.0"
   },
   "repository": {
     "type": "git",
