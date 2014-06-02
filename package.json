@@ -46,7 +46,10 @@
     "stylus": "git://github.com/LearnBoost/stylus.git",
     "templar": "~0.2",
     "zag-agent": "0.0.1",
-    "bluebird": "~1.2.4"
+    "bluebird": "~1.2.4",
+    "browserify": "^4.1.7",
+    "uglifyjs": "~2.3.6",
+    "npm-typeahead": "0.0.0"
   },
   "bundleDependencies": [
     "async-cache",
@@ -91,21 +94,18 @@
   },
   "scripts": {
     "start": "node server.js",
+    "prestart": "browserify assets/*.js | uglifyjs > static/js/include.js",
     "show-conf": "node config.js",
     "dev": "node dev/go.js | bunyan -l warn",
     "dev-www": "node dev/go.js www-only | bunyan -l warn",
     "dev-db": "node dev/go.js db-only | bunyan -l warn",
     "repl": "node repl.js",
-    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js",
-    "browserify": "./node_modules/.bin/browserify assets/*.js | ./node_modules/browserify/node_modules/umd/node_modules/uglify-js/bin/uglifyjs > static/js/include.js"
+    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js"
   },
   "devDependencies": {
     "replicate": "git://github.com/isaacs/replicate",
     "touch": "0",
-    "once": "~1.1.1",
-    "browserify": "~4.1.6",
-    "uglifyjs": "~2.3.6",
-    "npm-typeahead": "0.0.0"
+    "once": "~1.1.1"
   },
   "repository": {
     "type": "git",
