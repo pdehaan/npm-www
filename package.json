@@ -49,7 +49,7 @@
     "bluebird": "~1.2.4",
     "browserify": "^4.1.7",
     "uglifyjs": "~2.3.6",
-    "npm-typeahead": "0.0.0"
+    "npm-typeahead": "^0.2.0"
   },
   "bundleDependencies": [
     "async-cache",
