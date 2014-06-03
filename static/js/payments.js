@@ -9,7 +9,7 @@ $(document).ready(function () {
       token.amount = amount
 
       $.ajax({
-        url: '/payments'
+        url: '/joinwhoshiring'
       , data: JSON.stringify(token)
       , type: 'POST'
       })
