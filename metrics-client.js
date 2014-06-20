@@ -37,12 +37,17 @@ function EmitterFacade(collector, prefix) {
 
 EmitterFacade.prototype.makePoint = function(name) {
 
+  name = name.replace(/\|/g, '.').replace('.null', '').replace(/\.$/, '')
   var details
   var pieces = name.split('>')
   if (pieces.length > 0) {
     name = pieces.shift()
     details = pieces.join('>')
   }
+
+  if (name.match(/^latency\.package\./))
+    name = 'latency.package'
+
   var result = {
     env: this.env,
     name: name
