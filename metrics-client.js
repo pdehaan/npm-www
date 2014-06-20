@@ -35,14 +35,36 @@ function EmitterFacade(collector, prefix) {
   this.prefix = prefix || 'npm-www'
 }
 
+EmitterFacade.prototype.makePoint = function(name) {
+
+  var details
+  var pieces = name.split('>')
+  if (pieces.length > 0) {
+    name = pieces.shift()
+    details = pieces.join('>')
+  }
+  var result = {
+    app: this.prefix,
+    name: name
+  }
+  if (details) result.details = details
+
+  return result
+}
+
 EmitterFacade.prototype.histogram = function(name, value) {
   value = value || 1
-  this.client.metric({ name: name, value: value, tags: ['histogram']})
+  var point = this.makePoint(name)
+  point.value = value
+
+  this.client.metric(point)
 }
 
 EmitterFacade.prototype.counter = function(name, count) {
   count = count || 1
-  this.client.metric({ name: name, count: count, tags: ['counter']})
+  var point = this.makePoint(name)
+  point.count = count
+  this.client.metric(point)
 }
 
 EmitterFacade.prototype.close = function() {
