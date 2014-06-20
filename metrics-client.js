@@ -12,7 +12,7 @@ module.exports = function Metrics () {
   // define the metrics agent
   if (config && config.metrics) {
     metrics =
-    metrics = new EmitterFacade(config.metrics.collectors, config.metrics.prefix)
+    metrics = new EmitterFacade(config.metrics.collector, config.metrics.prefix)
   } else {
     metrics = { histogram: function() {}, counter: function() {}, close: function() {} }
   }
@@ -27,7 +27,7 @@ module.exports = function Metrics () {
 */
 
 function EmitterFacade(collector, prefix) {
-  this.client = Emitter({
+  this.client = new Emitter({
     host: collector.host,
     port: collector.port,
     node: os.hostname()

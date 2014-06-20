@@ -172,7 +172,7 @@ function launchWww (er) {
   }
 
   config.metrics = {
-      collectors: [ 'metrics.internal.npmjs.com:8877' ],
+      collector: { host: 'dashboard-1-west.internal.npmjs.com', port: 3333 },
       prefix:     'npm-www-dev'
   }
 
