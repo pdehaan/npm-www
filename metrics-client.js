@@ -11,7 +11,6 @@ module.exports = function Metrics () {
   var config = require("./config.js")
   // define the metrics agent
   if (config && config.metrics) {
-    metrics =
     metrics = new EmitterFacade(config.metrics.collector, config.metrics.prefix)
   } else {
     metrics = { histogram: function() {}, counter: function() {}, close: function() {} }
