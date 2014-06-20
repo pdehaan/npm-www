@@ -32,7 +32,7 @@ function EmitterFacade(collector, prefix) {
     port: collector.port,
     node: os.hostname()
   })
-  this.prefix = prefix || 'npm-www'
+  this.env = prefix || 'www-dev'
 }
 
 EmitterFacade.prototype.makePoint = function(name) {
@@ -44,7 +44,7 @@ EmitterFacade.prototype.makePoint = function(name) {
     details = pieces.join('>')
   }
   var result = {
-    app: this.prefix,
+    env: this.env,
     name: name
   }
   if (details) result.details = details
@@ -53,17 +53,15 @@ EmitterFacade.prototype.makePoint = function(name) {
 }
 
 EmitterFacade.prototype.histogram = function(name, value) {
-  value = value || 1
   var point = this.makePoint(name)
-  point.value = value
+  point.value = value || 1
 
   this.client.metric(point)
 }
 
 EmitterFacade.prototype.counter = function(name, count) {
-  count = count || 1
   var point = this.makePoint(name)
-  point.count = count
+  point.count = count || 1
   this.client.metric(point)
 }
 
