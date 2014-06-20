@@ -6,6 +6,7 @@
   "version": "0.8.0",
   "dependencies": {
     "async-cache": "~0.1.2",
+    "browserify": "^4.1.7",
     "bunyan": "~0.14.0",
     "canonical-host": "0",
     "cluster-master": "~0.1.0",
@@ -32,9 +33,12 @@
     "nodemailer": "~0.3.19",
     "npm": "^1.4.4",
     "npm-registry-client": "~0.2.24",
+    "npm-typeahead": "^0.2.0",
     "npm-user-validate": "^0.1.0",
     "npm2es": "git://github.com/npm/npm2es.git",
     "npmconf": "0.0",
+    "numbat-emitter": "0.0.1",
+    "parse-json-response": "^1.0.1",
     "raygun": "^0.4.1",
     "redis": "~0.8.6",
     "redsess": "^1.1.0",
@@ -45,11 +49,7 @@
     "stripe": "^2.5.2",
     "stylus": "git://github.com/LearnBoost/stylus.git",
     "templar": "~0.2",
-    "zag-agent": "0.0.1",
-    "bluebird": "~1.2.4",
-    "browserify": "^4.1.7",
-    "uglifyjs": "~2.3.6",
-    "npm-typeahead": "^0.2.0"
+    "uglifyjs": "~2.3.6"
   },
   "bundleDependencies": [
     "async-cache",
@@ -79,6 +79,7 @@
     "npm-registry-client",
     "npm-user-validate",
     "npmconf",
+    "numbat-emitter",
     "raygun",
     "redis",
     "redsess",
