@@ -45,5 +45,13 @@
     "description": "<a href='https://www.uber.com/jobs/4807'>UBER</a> has the largest real time, distributed system built in Node.js and needs passionate contributors to scale our team to new heights.",
     "url": "https://www.uber.com/jobs/4807",
     "show_weight": 1
+  }, 
+  
+  "mulesoft": {
+    "id": "mulesoft",
+    "name": "MuleSoft",
+    "description": "<a href='http://www.mulesoft.com/careers'>Mulesoft</a> is looking for node.js Developers to join our smart and talented team of Core Services engineers in San Francisco.",
+    "url": "http://www.mulesoft.com/careers",
+    "show_weight": 1
   }
 }
