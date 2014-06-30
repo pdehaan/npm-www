@@ -37,7 +37,7 @@
     "npm-user-validate": "^0.1.0",
     "npm2es": "git://github.com/npm/npm2es.git",
     "npmconf": "0.0",
-    "numbat-emitter": "0.0.1",
+    "numbat-emitter": "^0.0.2",
     "parse-json-response": "^1.0.1",
     "raygun": "^0.4.1",
     "redis": "~0.8.6",
