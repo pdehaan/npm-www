@@ -58,7 +58,7 @@
   "polyvore": {
     "id": "polyvore",
     "name": "Polyvore",
-    "description": "<a href='http://www.polyvore.com/cgi/about.jobs'>Polyvore</a> is a profitable startup in Mountain View. Our product pushes JS to its limits. We're looking for awesome Node.js engineers!",
+    "description": "<a href='http://www.polyvore.com/cgi/about.jobs'>Polyvore</a> is a profitable startup in Mountain View. Our product pushes JS to its limits, and we're looking for awesome Node.js engineers!",
     "url": "http://www.polyvore.com/cgi/about.jobs",
     "show_weight": 1
   }
