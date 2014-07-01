@@ -53,5 +53,13 @@
     "description": "<a href='http://www.mulesoft.com/careers'>Mulesoft</a> is looking for node.js Developers to join our smart and talented team of Core Services engineers in San Francisco.",
     "url": "http://www.mulesoft.com/careers",
     "show_weight": 1
+  },
+
+  "polyvore": {
+    "id": "polyvore",
+    "name": "Polyvore",
+    "description": "<a href='http://www.polyvore.com/cgi/about.jobs'>Polyvore</a> is a profitable startup in Mountain View. Our product pushes JS to its limits. We're looking for awesome Node.js engineers!",
+    "url": "http://www.polyvore.com/cgi/about.jobs",
+    "show_weight": 1
   }
 }
