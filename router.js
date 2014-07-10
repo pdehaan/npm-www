@@ -71,6 +71,7 @@ router.addRoute('/forgot', forgot)
 router.addRoute('/forgot/:token', forgot)
 
 router.addRoute('/about', require('./routes/about.js'))
+router.addRoute('/enterprise', require('./routes/enterprise.js'))
 
 router.addRoute('/whoshiring', require('./routes/whoshiring.js'))
 router.addRoute('/joinwhoshiring', require('./routes/payments.js'))

@@ -1,0 +1,19 @@
+module.exports = about
+
+var config = require('../config.js')
+var td = {}
+Object.keys(config).forEach(function (k) {
+  td[k] = config[k]
+})
+td.title = 'npm Enterprise: on-prem private npm registry'
+function about (req, res) {
+  req.model.load("profile", req)
+  req.model.load("whoshiring")
+  req.model.end(function(er, m) {
+    if(er) return res.error(er)
+    td.profile = m.profile
+    td.hiring = m.whoshiring
+    td.HEAD = config.HEAD
+    res.template('enterprise.ejs', td)
+  })
+}
