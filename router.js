@@ -75,6 +75,9 @@ router.addRoute('/about', require('./routes/about.js'))
 router.addRoute('/whoshiring', require('./routes/whoshiring.js'))
 router.addRoute('/joinwhoshiring', require('./routes/payments.js'))
 
+router.addRoute('/npme-beta', require('./routes/npme-beta.js'))
+router.addRoute('/npme-beta-thanks', require('./routes/npme-beta.js'))
+
 router.addRoute('/', function (req, res) {
   var search = req.url && req.url.split('?')[1]
   if (search) return res.redirect('/search?' + search, 301)
