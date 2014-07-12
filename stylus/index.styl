@@ -144,7 +144,7 @@ form {
       }
       li:first-child { border-top: none; }
 
-      for link, i in home download about npm docs blog community logos jobs hiring-group hiring-company hiring-more {
+      for link, i in home download about npm docs blog community logos jobs hiring-group npme-group {
         li.{link} a {
           background-position: -156px -24*i+3px;
         }
@@ -165,8 +165,26 @@ form {
         .hiring-company {
           padding: 0;
           text-align: center;
+          a {
+            padding: 0;
+            background: none;
+          }
+        }
 
-          a { padding: 0; }
+        .hiring-more a {
+          background: none;
+        }
+      }
+
+      &.npme {
+        margin-top: 3em;
+        text-transform: none;
+
+        .npme-details a {
+          padding: 0.5em 0;
+          background: none;
+          line-height: normal;
+          text-align: center;
         }
       }
     }
