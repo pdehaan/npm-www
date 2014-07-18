@@ -85,11 +85,13 @@ function handleData (req, res, data) {
 
   req.couch.changePass(newAuth, function (er, cr, data) {
     if (er || cr.statusCode >= 400) {
-      return res.error(er, cr && cr.statusCode,
-                       JSON.stringify(data))
-      td.error = 'Failed setting the password: '
-               + (data && data.message || er && er.message)
-      return res.template('password.ejs', td, cr.statusCode)
+      res.session.set('error', er)
+      res.session.set('done', req.url)
+      return res.redirect('/login')
+
+      // td.error = 'Failed setting the password: '
+      //          + (data && data.message || er && er.message)
+      // return res.template('password.ejs', td, cr.statusCode)
     }
 
     // now we're logged in with the new profile info.
