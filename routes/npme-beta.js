@@ -2,7 +2,7 @@ module.exports = npme
 
 var td = {}
 
-td.title = "npm-Enterprise beta"
+td.title = "npm Enterprise: on-premises private npm registry"
 
 function npme (req, res) {
   req.model.load("profile", req)
